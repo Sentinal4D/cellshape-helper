@@ -1,4 +1,4 @@
-from vendored.pytorch_geometric_files import *
+from _vendor.pytorch_geometric_files import *
 from pyntcloud import PyntCloud
 import pandas as pd
 from skimage import io
