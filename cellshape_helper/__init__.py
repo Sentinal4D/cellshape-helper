@@ -1,3 +1,2 @@
-from conversions import *
-from segmentation import *
-from _vendor.pytorch_geometric_files import *
+from cellshape_helper.conversions import *
+from cellshape_helper.segmentation import *
