@@ -12,6 +12,10 @@ requirements = [
     "pyntcloud",
     "numpy",
     "matplotlib",
+    "scikit-image",
+    "pymesh",
+    "pandas",
+    "tqdm",
 ]
 
 
