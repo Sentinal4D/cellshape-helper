@@ -16,6 +16,7 @@ requirements = [
     "pymesh",
     "pandas",
     "tqdm",
+    "tifffile",
 ]
 
 

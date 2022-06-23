@@ -1,7 +1,7 @@
 from ._vendor.pytorch_geometric_files import read_off, sample_points
 from pyntcloud import PyntCloud
 import pandas as pd
-from skimage import io
+from tifffile import imread
 import pymesh
 from skimage.measure import marching_cubes
 from tqdm import tqdm
@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 def tif_to_mesh(tif_file):
-    img = io.imread(tif_file)
+    img = imread(tif_file)
     print(img.shape)
     vertices, faces, normals, values = marching_cubes(img)
     mesh_obj = pymesh.form_mesh(vertices, faces, values)
