@@ -9,7 +9,7 @@ from .util import create_dir_if_not_exist
 from pathlib import Path
 
 
-def tif_to_mesh(tif_directory):
+def tif_to_mesh(tif_directory, save_directory):
     p = Path(tif_directory)
     files = list(p.glob("**/*.tif"))
     for tif_file in tqdm(files):
@@ -18,7 +18,7 @@ def tif_to_mesh(tif_directory):
         vertices, faces, normals, values = marching_cubes(img)
         mesh_obj = pymesh.form_mesh(vertices, faces, values)
         print(str(tif_directory))
-        save_to_mesh_path = str(tif_directory) + "_mesh"
+        save_to_mesh_path = save_directory
         create_dir_if_not_exist(save_to_mesh_path)
         split_string = tif_file_path.name.split(".")
         file_name = split_string[0]
