@@ -11,6 +11,7 @@ from pathlib import Path
 
 def tif_to_mesh(tif_file):
     img = io.imread(tif_file)
+    print(img.shape)
     vertices, faces, normals, values = marching_cubes(img)
     mesh_obj = pymesh.form_mesh(vertices, faces, values)
     return mesh_obj
@@ -43,8 +44,8 @@ def mesh_to_pc_directory(mesh_directory, save_directory, num_points):
         cloud.to_file(save_to + file[:-3] + "ply")
 
 
-def tif_to_pc(tiffile, num_points):
-    mesh = tif_to_mesh(tiffile)
+def tif_to_pc(tif_file, num_points):
+    mesh = tif_to_mesh(tif_file)
     pc = mesh_to_pc(mesh, num_points)
     return pc
 
