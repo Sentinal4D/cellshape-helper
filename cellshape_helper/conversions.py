@@ -17,6 +17,7 @@ def tif_to_mesh(tif_directory):
         img = imread(tif_file)
         vertices, faces, normals, values = marching_cubes(img)
         mesh_obj = pymesh.form_mesh(vertices, faces, values)
+        print(str(tif_directory))
         save_to_mesh_path = str(tif_directory) + "_mesh"
         create_dir_if_not_exist(save_to_mesh_path)
         split_string = tif_file_path.name.split(".")
@@ -27,7 +28,7 @@ def tif_to_mesh(tif_directory):
 
 def mesh_to_pc(mesh_directory, num_points):
     p = Path(mesh_directory)
-    files = list(p.glob("**/*.tif"))
+    files = list(p.glob("**/*.off"))
     for mesh_file in tqdm(files):
         mesh_file_path = Path(mesh_file)
         data = read_off(mesh_file)
@@ -39,6 +40,11 @@ def mesh_to_pc(mesh_directory, num_points):
         cloud = PyntCloud(pd.DataFrame(data=points, columns=["x", "y", "z"]))
         cloud.to_file(save_to_points_path + file_name + ".ply")
         return points
+
+
+def tif_to_pc_directory(tif_directory, num_points):
+    mesh_directory = tif_to_mesh(tif_directory)
+    mesh_to_pc(mesh_directory, num_points)
 
 
 def tif_to_mesh_directory(image_directory, save_directory):
@@ -66,8 +72,3 @@ def tif_to_pc(tif_file, num_points):
     mesh = tif_to_mesh(tif_file)
     pc = mesh_to_pc(mesh, num_points)
     return pc
-
-
-def tif_to_pc_directory(tif_directory, num_points):
-    mesh_directory = tif_to_mesh(tif_directory)
-    mesh_to_pc(mesh_directory, num_points)
