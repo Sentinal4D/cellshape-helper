@@ -33,7 +33,7 @@ def mesh_to_pc(mesh_directory, num_points):
         mesh_file_path = Path(mesh_file)
         data = read_off(mesh_file)
         points = sample_points(data=data, num=num_points)
-        save_to_points_path = str(mesh_directory) + "_points"
+        save_to_points_path = str(mesh_directory)[:-1] + "_points"
         create_dir_if_not_exist(save_to_points_path)
         split_string = mesh_file_path.name.split(".")
         file_name = split_string[0]
