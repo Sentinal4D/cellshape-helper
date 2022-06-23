@@ -13,7 +13,6 @@ requirements = [
     "numpy",
     "matplotlib",
     "scikit-image",
-    "pymesh",
     "pandas",
     "tqdm",
     "tifffile",
