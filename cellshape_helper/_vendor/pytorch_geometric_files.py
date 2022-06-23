@@ -12,18 +12,17 @@ def parse_txt_array(src, sep=None, start=0, end=None, dtype=None):
 
 def parse_off(src):
     # Some files may contain a bug and do not have a carriage return after OFF.
-    if src[0] == 'OFF':
+    if src[0] == "OFF":
         src = src[2:]
     else:
         src[0] = src[0][3:]
 
     num_nodes, num_faces = [int(item) for item in src[0].split()[:2]]
 
-    pos = parse_txt_array(src[1:1 + num_nodes])
-    face = src[1 + num_nodes:1 + num_nodes + num_faces]
+    pos = parse_txt_array(src[1 : 1 + num_nodes])
+    face = src[1 + num_nodes : 1 + num_nodes + num_faces]
     face = face_to_tri(face)
-    data = {'pos': pos,
-            'face': face}
+    data = {"pos": pos, "face": face}
 
     return data
 
@@ -51,13 +50,13 @@ def read_off(path):
     Args:
         path (str): The path to the file.
     """
-    with open(path, 'r') as f:
-        src = f.read().split('\n')[:-1]
+    with open(path, "r") as f:
+        src = f.read().split("\n")[:-1]
     return parse_off(src)
 
 
 def sample_points(data, num):
-    pos, face = data['pos'], data['face']
+    pos, face = data["pos"], data["face"]
     assert pos.size(1) == 3 and face.size(0) == 3
 
     pos_max = pos.abs().max()
