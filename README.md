@@ -52,10 +52,14 @@ port install
 ```
 
 - Python dependencies such as NumPy and SciPy can be installed using pip:
+```bash
 pip install -r $PYMESH_PATH/python/requirements.txt
+```
 
 - Build PyMesh with setuptools:
+```bash
 ./setup.py build
+```
 
 - Install PyMesh:
 ```bash
