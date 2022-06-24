@@ -18,6 +18,7 @@ in particular,
 
 
 ## To install
+This package relies on [PyMesh](https://pymesh.readthedocs.io/en/latest/index.html)
 ```bash
 pip install cellshape-helper
 ```
