@@ -1,4 +1,4 @@
-from ._vendor.pytorch_geometric_files import read_off, sample_points
+from .vendor.pytorch_geometric_files import read_off, sample_points
 from pyntcloud import PyntCloud
 import pandas as pd
 from tifffile import imread
