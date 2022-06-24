@@ -83,6 +83,8 @@ pip install cellshape-helper
 ## Usage
 ```python
 import cellshape_helper as helper
+
+
 PATH_TO_TIF_FILES = "path/to/tif/files/"
 PATH_TO_SAVE_MESH = "path/to/save/mesh/files/"
 PATH_TO_SAVE_PC = "path/to/save/pointcloud/files/"
