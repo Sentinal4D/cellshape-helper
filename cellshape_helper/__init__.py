@@ -1,4 +1,4 @@
 from cellshape_helper.conversions import *
 from cellshape_helper.segmentation import *
 
-__version__ = "0.0.11"
+__version__ = "0.0.12-rc0"
