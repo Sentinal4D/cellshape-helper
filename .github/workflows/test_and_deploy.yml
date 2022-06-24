@@ -18,8 +18,7 @@ jobs:
           git clone https://github.com/PyMesh/PyMesh.git
           cd PyMesh
           git submodule update --init
-          export PYMESH_PATH='pwd'
-          pip install -r $PYMESH_PATH/python/requirements.txt
+          pip install -r ./python/requirements.txt
           
           ./setup.py build
           ./setup.py install  # May require root privilege
