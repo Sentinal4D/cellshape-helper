@@ -12,9 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ___
-Cellshape-helper is an easy-to-use tool to analyse the shapes of cells using deep learning and, 
-in particular, 
-3D convolutional neural networks. The tool provides the ability to convert masks to point clouds.
+Cellshape-helper provides the ability to convert 3D masks to point clouds.
 
 
 ## To install
