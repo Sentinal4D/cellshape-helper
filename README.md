@@ -82,12 +82,27 @@ pip install cellshape-helper
 
 ## Usage
 ```python
+import cellshape_helper as helper
+PATH_TO_TIF_FILES = "path/to/tif/files/"
+PATH_TO_SAVE_MESH = "path/to/save/mesh/files/"
+PATH_TO_SAVE_PC = "path/to/save/pointcloud/files/"
+NUM_POINTS = 2048
 
+helper.tif_to_pc_directory(PATH_TO_TIF_FILES, 
+                           PATH_TO_SAVE_MESH, 
+                           PATH_TO_SAVE_PC, 
+                           NUM_POINTS)
 ```
 
 ## Parameters
-
-
+- `PATH_TO_TIF_FILES`: str.  
+The path to you binary masks of cells or nuclei.
+- `PATH_TO_SAVE_MESH`: str.  
+The path where you want to save the mesh objects to.
+- `PATH_TO_SAVE_PC`: str.  
+The path where you want to save your point clouds to.
+- `NUM_POINTS`: str.  
+The number of points to sample from the mesh object when creating a point cloud.
 
 
 ## For developers
