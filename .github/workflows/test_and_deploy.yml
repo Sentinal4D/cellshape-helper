@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          cd ./cellshape_helper/_vendor/PyMesh
+          cd ./_vendor/PyMesh
           git submodule update --init
           export PYMESH_PATH=`pwd'
           pip install -r $PYMESH_PATH/python/requirements.txt
