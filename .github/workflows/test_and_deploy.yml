@@ -14,14 +14,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          la
+          ls
           git submodule update --init
           export PYMESH_PATH=`pwd'
           pip install -r $PYMESH_PATH/python/requirements.txt
           
           ./setup.py build
           ./setup.py install  # May require root privilege
-          
+          cd
           pip install .[dev]
       - name: Lint
         run: |
