@@ -1,6 +1,6 @@
 from os import path
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
@@ -39,7 +39,7 @@ setup(
         ]
     },
     python_requires=">=3.7",
-    packages=["cellshape_helper"],
+    packages=find_packages(),
     package_dir={"cellshape_helper": "cellshape_helper"},
     include_package_data=True,
     project_urls={
