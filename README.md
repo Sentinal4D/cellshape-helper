@@ -11,6 +11,9 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Coverage Status](https://coveralls.io/repos/github/Sentinal4D/cellshape-helper/badge.svg?branch=master)](https://coveralls.io/github/Sentinal4D/cellshape-helper?branch=master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+
+<img src="https://github.com/Sentinal4D/cellshape-helper/blob/main/img/cellshape_helper_logo.png" 
+     alt="Cellshape logo by Matt De Vries">
 ___
 Cellshape-helper provides the ability to convert 3D masks to point clouds.
 
