@@ -13,11 +13,11 @@ def parse_txt_array(src, sep=None, start=0, end=None, dtype=None):
 def parse_off(src):
     # Some files may contain a bug and do not have a carriage return after OFF.
     if src[0] == "OFF":
-        src = src[2:]
+        src = src[1:]
     else:
         src[0] = src[0][3:]
 
-    num_nodes, num_faces = [int(item) for item in src[0].split()[:2]]
+    num_nodes, num_faces = [int(float(item)) for item in src[0].split()[:2]]
 
     pos = parse_txt_array(src[1 : 1 + num_nodes])
     face = src[1 + num_nodes : 1 + num_nodes + num_faces]
