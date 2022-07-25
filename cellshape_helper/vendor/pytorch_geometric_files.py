@@ -17,7 +17,7 @@ def parse_off(src):
     else:
         src[0] = src[0][3:]
 
-    num_nodes, num_faces = [int(item) for item in src[0].split()[:2]]
+    num_nodes, num_faces = [int(float(item)) for item in src[0].split()[:2]]
 
     pos = parse_txt_array(src[1 : 1 + num_nodes])
     face = src[1 + num_nodes : 1 + num_nodes + num_faces]
