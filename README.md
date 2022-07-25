@@ -18,14 +18,13 @@ ___
 Cellshape-helper provides the ability to convert 3D masks to point clouds.
 
 
-## To install
+# To install
 
-### Step 2: Install cellshape-helper
 ```bash
 pip install cellshape-helper
 ```
 
-## Usage
+# Basic Usage
 ```python
 import cellshape_helper as helper
 
@@ -41,7 +40,7 @@ helper.tif_to_pc_directory(PATH_TO_TIF_FILES,
                            NUM_POINTS)
 ```
 
-## Parameters
+# Parameters
 - `PATH_TO_TIF_FILES`: str.  
 The path to you binary masks of cells or nuclei.
 - `PATH_TO_SAVE_MESH`: str.  
