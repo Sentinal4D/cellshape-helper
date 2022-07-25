@@ -2,7 +2,7 @@ from .vendor.pytorch_geometric_files import read_off, sample_points
 from pyntcloud import PyntCloud
 import pandas as pd
 from tifffile import imread
-import pymesh
+import trimesh
 from skimage.measure import marching_cubes
 from tqdm import tqdm
 from .util import create_dir_if_not_exist
@@ -16,12 +16,14 @@ def tif_to_mesh(tif_directory, save_directory):
         tif_file_path = Path(tif_file)
         img = imread(tif_file)
         vertices, faces, normals, values = marching_cubes(img)
-        mesh_obj = pymesh.form_mesh(vertices, faces, values)
+        mesh_obj = trimesh.Trimesh(
+            vertices=vertices, faces=faces, process=False
+        )
         save_to_mesh_path = save_directory
         create_dir_if_not_exist(save_to_mesh_path)
         split_string = tif_file_path.name.split(".")
         file_name = split_string[0]
-        pymesh.save_mesh(save_to_mesh_path + file_name + ".off", mesh_obj)
+        mesh_obj.export(save_to_mesh_path + file_name + ".off")
 
 
 def mesh_to_pc(mesh_directory, num_points, save_dir):
