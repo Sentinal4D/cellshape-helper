@@ -13,7 +13,7 @@ def parse_txt_array(src, sep=None, start=0, end=None, dtype=None):
 def parse_off(src):
     # Some files may contain a bug and do not have a carriage return after OFF.
     if src[0] == "OFF":
-        src = src[2:]
+        src = src[1:]
     else:
         src[0] = src[0][3:]
 
