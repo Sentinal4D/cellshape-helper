@@ -16,9 +16,9 @@ def tif_to_mesh(tif_directory, save_directory):
         tif_file_path = Path(tif_file)
         img = imread(tif_file)
         vertices, faces, normals, values = marching_cubes(img)
-        mesh_obj = trimesh.Trimesh(vertices=vertices,
-                                   faces=faces,
-                                   process=False)
+        mesh_obj = trimesh.Trimesh(
+            vertices=vertices, faces=faces, process=False
+        )
         save_to_mesh_path = save_directory
         create_dir_if_not_exist(save_to_mesh_path)
         split_string = tif_file_path.name.split(".")

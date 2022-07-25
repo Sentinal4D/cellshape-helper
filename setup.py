@@ -16,7 +16,7 @@ requirements = [
     "pandas",
     "tqdm",
     "tifffile",
-    "trimesh"
+    "trimesh",
 ]
 
 
