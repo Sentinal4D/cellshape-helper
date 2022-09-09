@@ -21,8 +21,9 @@ def tif_to_mesh(tif_directory, save_directory):
         )
         save_to_mesh_path = save_directory
         create_dir_if_not_exist(save_to_mesh_path)
-        split_string = tif_file_path.name.split(".")
-        file_name = split_string[0]
+        # split_string = tif_file_path.name.split(".")
+        # file_name = split_string[0]
+        file_name = tif_file_path.name[:-4]
         mesh_obj.export(save_to_mesh_path + file_name + ".off")
 
 
@@ -36,8 +37,9 @@ def mesh_to_pc(mesh_directory, num_points, save_dir):
         points = sample_points(data=data, num=num_points).numpy()
         save_to_points_path = save_dir
         create_dir_if_not_exist(save_to_points_path)
-        split_string = mesh_file_path.name.split(".")
-        file_name = split_string[0]
+        # split_string = mesh_file_path.name.split(".")
+        # file_name = split_string[0]
+        file_name = mesh_file_path.name[:-4]
         cloud = PyntCloud(pd.DataFrame(data=points, columns=["x", "y", "z"]))
         cloud.to_file(save_to_points_path + file_name + ".ply")
 
