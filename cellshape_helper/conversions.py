@@ -58,13 +58,10 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
         points_data = []
         for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
-                image = imread(os.path.join(path, fpath))
-                print(image.shape)
-                properties = regionprops(image)
-                binary_image = [prop.image for prop in properties]
-                print(len(binary_image), np.asarray(binary_image).shape)
-                for i in len(binary_image):
-                    vertices, faces, normals, values = marching_cubes(binary_image[i,:])
+                lbl_img = imread(os.path.join(path, fpath))
+                for l in (set(np.unique(lbl_img)) - set([0])):
+                    binary_image = lbl_img==l
+                    vertices, faces, normals, values = marching_cubes(binary_image)
                     mesh_obj = trimesh.Trimesh(
                         vertices=vertices, faces=faces, process=False
                     )
