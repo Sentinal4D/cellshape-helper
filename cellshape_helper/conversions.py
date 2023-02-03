@@ -62,6 +62,7 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
                 print(image.shape)
                 properties = regionprops(image)
                 binary_image = [prop.image for prop in properties]
+                print(len(binary_image), np.asarray(binary_image).shape)
                 for i in len(binary_image):
                     vertices, faces, normals, values = marching_cubes(binary_image[i,:])
                     mesh_obj = trimesh.Trimesh(
