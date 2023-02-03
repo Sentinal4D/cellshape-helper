@@ -3,11 +3,12 @@ from pyntcloud import PyntCloud
 import pandas as pd
 from tifffile import imread
 import trimesh
-from skimage.measure import marching_cubes
+from skimage.measure import marching_cubes, regionprops
 from tqdm import tqdm
 from .util import create_dir_if_not_exist
 from pathlib import Path
-
+import os
+import numpy as np
 
 def tif_to_mesh(tif_directory, save_directory):
     p = Path(tif_directory)
@@ -47,3 +48,27 @@ def mesh_to_pc(mesh_directory, num_points, save_dir):
 def tif_to_pc_directory(tif_directory, save_mesh, save_points, num_points):
     tif_to_mesh(tif_directory, save_mesh)
     mesh_to_pc(save_mesh, num_points, save_points)
+
+
+def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_points: int):
+    acceptable_formats = [".tif", ".TIFF", ".TIF", ".png"]
+    Path(save_dir).mkdir(exist_ok = True)
+    if os.path.isdir(path):
+        mesh_data = []
+        points_data = []
+        for fpath in os.listdir(path):     
+            if any(fpath.endswith(f) for f in acceptable_formats):
+                image = imread(os.path.join(path, fpath))
+                properties = regionprops(image)
+                binary_image = [prop.image for prop in properties]
+                vertices, faces, normals, values = marching_cubes(binary_image)
+                mesh_obj = trimesh.Trimesh(
+                    vertices=vertices, faces=faces, process=False
+                )
+                points = sample_points(data=mesh_obj, num=num_points).numpy()
+                mesh_data.append(mesh_obj) 
+                points_data.append(points)
+        
+        mesh_data = np.asarray(mesh_data)
+        points_data = np.asarray(points_data)
+        np.savez(save_dir + save_name, mesh=mesh_data, points=points_data)
