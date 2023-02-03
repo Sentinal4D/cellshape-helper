@@ -57,7 +57,7 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
     point_cloud_save_dir = os.path.join(save_dir, 'point_cloud')
     Path(save_dir).mkdir(exist_ok = True)
     Path(mesh_save_dir).mkdir(exist_ok = True)
-
+    Path(point_cloud_save_dir).mkdir(exist_ok = True)
     if os.path.isdir(path):
         for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
