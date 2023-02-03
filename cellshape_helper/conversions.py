@@ -51,7 +51,7 @@ def tif_to_pc_directory(tif_directory, save_mesh, save_points, num_points):
     mesh_to_pc(save_mesh, num_points, save_points)
 
 
-def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_points: int):
+def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int):
     acceptable_formats = [".tif", ".TIFF", ".TIF", ".png"]
     mesh_save_dir = os.path.join(save_dir, 'mesh')
     point_cloud_save_dir = os.path.join(save_dir, 'point_cloud')
