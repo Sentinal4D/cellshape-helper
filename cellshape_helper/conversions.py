@@ -62,9 +62,10 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int):
     if os.path.isdir(path):
         for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
-                lbl_img = imread(os.path.join(path, fpath))
+                read_path = os.path.join(path, fpath)
+                lbl_img = imread(read_path)
                 clear_lbl_img = clear_border(lbl_img)
-                name = os.path.basename(os.path.splitext(path)[0])
+                name = os.path.basename(os.path.splitext(read_path)[0])
                 nthreads = os.cpu_count() - 1
 
                 with concurrent.futures.ThreadPoolExecutor(max_workers = nthreads) as executor:
