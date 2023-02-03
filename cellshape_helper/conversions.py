@@ -52,13 +52,16 @@ def tif_to_pc_directory(tif_directory, save_mesh, save_points, num_points):
 
 def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_points: int):
     acceptable_formats = [".tif", ".TIFF", ".TIF", ".png"]
+    mesh_save_dir = os.path.join(save_dir, 'mesh')
     Path(save_dir).mkdir(exist_ok = True)
+    Path(mesh_save_dir).mkdir(exist_ok = True)
     if os.path.isdir(path):
         mesh_data = []
         points_data = []
         for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
                 lbl_img = imread(os.path.join(path, fpath))
+                name = os.path.basename(os.path.splitext(path)[0])
                 for l in (set(np.unique(lbl_img)) - set([0])):
                     binary_image = lbl_img==l
                     
@@ -66,7 +69,10 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
                     mesh_obj = trimesh.Trimesh(
                         vertices=vertices, faces=faces, process=False
                     )
-                    points = sample_points(data=read_off(mesh_obj.export(__file__+ ".off")), num=num_points).numpy()
+                    mesh_file = mesh_save_dir + name + str(l) 
+                    mesh_obj.export(mesh_file + ".off") 
+                    data = read_off(mesh_file)
+                    points = sample_points(data=data, num=num_points).numpy()
                     mesh_data.append(mesh_obj) 
                     points_data.append(points)
         
