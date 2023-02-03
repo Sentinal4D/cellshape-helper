@@ -69,9 +69,9 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
                     mesh_obj = trimesh.Trimesh(
                         vertices=vertices, faces=faces, process=False
                     )
-                    mesh_file = mesh_save_dir + name + str(l) 
-                    mesh_obj.export(mesh_file + ".off") 
-                    data = read_off(mesh_file)
+                    mesh_file = name + str(l) 
+                    mesh_obj.export(os.path.join(mesh_save_dir, mesh_file) + ".off") 
+                    data = read_off(os.path.join(mesh_save_dir, mesh_file))
                     points = sample_points(data=data, num=num_points).numpy()
                     mesh_data.append(mesh_obj) 
                     points_data.append(points)
