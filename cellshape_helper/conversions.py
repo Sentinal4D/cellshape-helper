@@ -67,11 +67,11 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int):
                 clear_lbl_img = clear_border(lbl_img)
                 print('cleared borders')
                 name = os.path.basename(os.path.splitext(path)[0])
-                nthreads = os.cpu_count()
+                nthreads = os.cpu_count() - 1
 
                 with concurrent.futures.ThreadPoolExecutor(max_workers = nthreads) as executor:
                     futures = []
-                    for l in (set(np.unique(clear_lbl_img)) - set([0])):
+                    for l in tqdm(set(np.unique(clear_lbl_img)) - set([0])):
                         futures.append(executor.submit(get_current_label, clear_lbl_img, l))
                     for future in concurrent.futures.as_completed(futures):
                         binary_image = future.result()    
