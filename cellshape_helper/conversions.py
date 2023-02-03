@@ -3,7 +3,8 @@ from pyntcloud import PyntCloud
 import pandas as pd
 from tifffile import imread
 import trimesh
-from skimage.measure import marching_cubes, regionprops
+from skimage.measure import marching_cubes
+from skimage.segmentation import clear_border
 from tqdm import tqdm
 from .util import create_dir_if_not_exist
 from pathlib import Path
@@ -61,9 +62,10 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
         for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
                 lbl_img = imread(os.path.join(path, fpath))
+                clear_lbl_img = clear_border(lbl_img)
                 name = os.path.basename(os.path.splitext(path)[0])
-                for l in (set(np.unique(lbl_img)) - set([0])):
-                    binary_image = lbl_img==l
+                for l in (set(np.unique(clear_lbl_img)) - set([0])):
+                    binary_image = clear_lbl_img==l
                     
                     vertices, faces, normals, values = marching_cubes(binary_image)
                     mesh_obj = trimesh.Trimesh(
