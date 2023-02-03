@@ -54,11 +54,11 @@ def tif_to_pc_directory(tif_directory, save_mesh, save_points, num_points):
 def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_points: int):
     acceptable_formats = [".tif", ".TIFF", ".TIF", ".png"]
     mesh_save_dir = os.path.join(save_dir, 'mesh')
+    point_cloud_save_dir = os.path.join(save_dir, 'point_cloud')
     Path(save_dir).mkdir(exist_ok = True)
     Path(mesh_save_dir).mkdir(exist_ok = True)
+
     if os.path.isdir(path):
-        mesh_data = []
-        points_data = []
         for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
                 lbl_img = imread(os.path.join(path, fpath))
@@ -73,12 +73,10 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
                     )
                     mesh_file = name + str(l) 
                     save_mesh_file = os.path.join(mesh_save_dir, mesh_file) + ".off"
+                    save_point_cloud_file = os.path.join(point_cloud_save_dir, mesh_file) + ".ply"
                     mesh_obj.export(save_mesh_file) 
                     data = read_off(os.path.join(mesh_save_dir, save_mesh_file))
                     points = sample_points(data=data, num=num_points).numpy()
-                    mesh_data.append(mesh_obj) 
-                    points_data.append(points)
-        
-        mesh_data = np.asarray(mesh_data)
-        points_data = np.asarray(points_data)
-        np.savez(os.path.join(save_dir, save_name), mesh=mesh_data, points=points_data)
+                    cloud = PyntCloud(pd.DataFrame(data=points, columns=["x", "y", "z"]))
+                    cloud.to_file(save_point_cloud_file)
+                    
