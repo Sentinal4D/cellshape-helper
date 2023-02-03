@@ -61,12 +61,12 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
                 lbl_img = imread(os.path.join(path, fpath))
                 for l in (set(np.unique(lbl_img)) - set([0])):
                     binary_image = lbl_img==l
-                    print(binary_image.shape)
+                    
                     vertices, faces, normals, values = marching_cubes(binary_image)
                     mesh_obj = trimesh.Trimesh(
                         vertices=vertices, faces=faces, process=False
                     )
-                    points = sample_points(data=mesh_obj, num=num_points).numpy()
+                    points = sample_points(data=mesh_obj.export(__file__), num=num_points).numpy()
                     mesh_data.append(mesh_obj) 
                     points_data.append(points)
         
