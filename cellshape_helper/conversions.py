@@ -56,19 +56,20 @@ def label_tif_to_pc_directory(path: str , save_dir: str, save_name: str, num_poi
     if os.path.isdir(path):
         mesh_data = []
         points_data = []
-        for fpath in os.listdir(path):     
+        for fpath in tqdm(os.listdir(path)):     
             if any(fpath.endswith(f) for f in acceptable_formats):
                 image = imread(os.path.join(path, fpath))
                 properties = regionprops(image)
                 binary_image = [prop.image for prop in properties]
-                vertices, faces, normals, values = marching_cubes(binary_image)
-                mesh_obj = trimesh.Trimesh(
-                    vertices=vertices, faces=faces, process=False
-                )
-                points = sample_points(data=mesh_obj, num=num_points).numpy()
-                mesh_data.append(mesh_obj) 
-                points_data.append(points)
+                for patch_image in binary_image:
+                    vertices, faces, normals, values = marching_cubes(patch_image)
+                    mesh_obj = trimesh.Trimesh(
+                        vertices=vertices, faces=faces, process=False
+                    )
+                    points = sample_points(data=mesh_obj, num=num_points).numpy()
+                    mesh_data.append(mesh_obj) 
+                    points_data.append(points)
         
         mesh_data = np.asarray(mesh_data)
         points_data = np.asarray(points_data)
-        np.savez(save_dir + save_name, mesh=mesh_data, points=points_data)
+        np.savez(os.path.join(save_dir, save_name), mesh=mesh_data, points=points_data)
