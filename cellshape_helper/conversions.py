@@ -10,6 +10,7 @@ from .util import create_dir_if_not_exist
 from pathlib import Path
 import os
 import numpy as np
+import concurrent
 
 def tif_to_mesh(tif_directory, save_directory):
     p = Path(tif_directory)
@@ -64,19 +65,29 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int):
                 lbl_img = imread(os.path.join(path, fpath))
                 clear_lbl_img = clear_border(lbl_img)
                 name = os.path.basename(os.path.splitext(path)[0])
-                for l in (set(np.unique(clear_lbl_img)) - set([0])):
-                    binary_image = clear_lbl_img==l
+                nthreads = os.cpu_count()
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers = nthreads) as executor:
+                    futures = []
+                    for l in (set(np.unique(clear_lbl_img)) - set([0])):
+                        futures.apend(executor.submit(get_current_label, clear_lbl_img, l))
+                    for future in concurrent.futures.as_completed(futures):
+                        binary_image = future.result()    
+                        vertices, faces, normals, values = marching_cubes(binary_image)
+                        mesh_obj = trimesh.Trimesh(
+                            vertices=vertices, faces=faces, process=False
+                        )
+                        mesh_file = name + str(l) 
+                        save_mesh_file = os.path.join(mesh_save_dir, mesh_file) + ".off"
+                        save_point_cloud_file = os.path.join(point_cloud_save_dir, mesh_file) + ".ply"
+                        mesh_obj.export(save_mesh_file) 
+                        data = read_off(os.path.join(mesh_save_dir, save_mesh_file))
+                        points = sample_points(data=data, num=num_points).numpy()
+                        cloud = PyntCloud(pd.DataFrame(data=points, columns=["x", "y", "z"]))
+                        cloud.to_file(save_point_cloud_file)
                     
-                    vertices, faces, normals, values = marching_cubes(binary_image)
-                    mesh_obj = trimesh.Trimesh(
-                        vertices=vertices, faces=faces, process=False
-                    )
-                    mesh_file = name + str(l) 
-                    save_mesh_file = os.path.join(mesh_save_dir, mesh_file) + ".off"
-                    save_point_cloud_file = os.path.join(point_cloud_save_dir, mesh_file) + ".ply"
-                    mesh_obj.export(save_mesh_file) 
-                    data = read_off(os.path.join(mesh_save_dir, save_mesh_file))
-                    points = sample_points(data=data, num=num_points).numpy()
-                    cloud = PyntCloud(pd.DataFrame(data=points, columns=["x", "y", "z"]))
-                    cloud.to_file(save_point_cloud_file)
-                    
+def get_current_label(clear_lbl_img, label):
+
+       binary_image = clear_lbl_img==label 
+
+       return binary_image                
