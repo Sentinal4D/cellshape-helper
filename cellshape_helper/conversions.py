@@ -72,12 +72,12 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int):
                     for l in tqdm(set(np.unique(clear_lbl_img)) - set([0])):
                         futures.append(executor.submit(get_current_label, clear_lbl_img, l))
                     for future in concurrent.futures.as_completed(futures):
-                        binary_image = future.result()    
+                        binary_image, label = future.result()    
                         vertices, faces, normals, values = marching_cubes(binary_image)
                         mesh_obj = trimesh.Trimesh(
                             vertices=vertices, faces=faces, process=False
                         )
-                        mesh_file = name + str(l) 
+                        mesh_file = name + str(label) 
                         save_mesh_file = os.path.join(mesh_save_dir, mesh_file) + ".off"
                         save_point_cloud_file = os.path.join(point_cloud_save_dir, mesh_file) + ".ply"
                         mesh_obj.export(save_mesh_file) 
@@ -90,4 +90,4 @@ def get_current_label(clear_lbl_img, label):
 
        binary_image = clear_lbl_img==label 
 
-       return binary_image                
+       return binary_image, label                 
