@@ -84,7 +84,7 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int, min_si
                                         else:
                                               valid.append(False)      
                             else:
-                                  for j in range(len(min_size)):
+                                  for j in range(len(binary_image.shape)):
                                               valid.append(True)
                                                     
                             if False not in valid:               
