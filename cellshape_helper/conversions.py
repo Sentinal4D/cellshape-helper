@@ -1,7 +1,7 @@
 from .vendor.pytorch_geometric_files import read_off, sample_points
 from pyntcloud import PyntCloud
 import pandas as pd
-from tifffile import imread
+from tifffile import imread, imwrite
 import trimesh
 from skimage.measure import marching_cubes, regionprops
 from skimage.segmentation import clear_border
@@ -68,15 +68,14 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int, min_si
                 name = os.path.basename(os.path.splitext(read_path)[0])
                 nthreads = os.cpu_count() - 1
                 properties = regionprops(clear_lbl_img)
-                bbox = [prop.bbox for prop in properties]
                 with concurrent.futures.ThreadPoolExecutor(max_workers = nthreads) as executor:
                     futures = []
-                    for i in range(len(bbox)):
-                            current_box = bbox[i]    
-                            futures.append(executor.submit(get_current_label_binary, clear_lbl_img, current_box, i))
+                    for prop in properties:
+                            futures.append(executor.submit(get_current_label_binary, prop))
                     for future in concurrent.futures.as_completed(futures):
                             binary_image, index = future.result()
                             valid = []  
+                              
                             if min_size is not None:
                                   for j in range(len(min_size)):
                                         if binary_image.shape[j] >= min_size[j]:
@@ -87,12 +86,14 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int, min_si
                                   for j in range(len(binary_image.shape)):
                                               valid.append(True)
                                                     
-                            if False not in valid:               
+                            if False not in valid: 
+                                            
                                     vertices, faces, normals, values = marching_cubes(binary_image)
                                     mesh_obj = trimesh.Trimesh(
                                         vertices=vertices, faces=faces, process=False
                                     )
                                     mesh_file = name + str(index) 
+                                   
                                     save_mesh_file = os.path.join(mesh_save_dir, mesh_file) + ".off"
                                     save_point_cloud_file = os.path.join(point_cloud_save_dir, mesh_file) + ".ply"
                                     mesh_obj.export(save_mesh_file) 
@@ -101,24 +102,9 @@ def label_tif_to_pc_directory(path: str , save_dir: str, num_points: int, min_si
                                     cloud = PyntCloud(pd.DataFrame(data=points, columns=["x", "y", "z"]))
                                     cloud.to_file(save_point_cloud_file)
                     
-def get_current_label_binary(clear_lbl_img, current_box, index):
-       
-       
-                crop_z_min = current_box[0]
-                crop_y_min = current_box[1]
-                crop_x_min = current_box[2]
-                crop_z_max = current_box[3]
-                crop_y_max = current_box[4]
-                crop_x_max = current_box[5]
-                region = (
-                    slice(int(crop_z_min), int(crop_z_max)),
-                    slice(
-                        int(crop_y_min) , int(crop_y_max) 
-                    ),
-                    slice(
-                        int(crop_x_min) , int(crop_x_max)
-                    ),
-                )
-                binary_image = clear_lbl_img[region] > 0
+def get_current_label_binary(prop):
+                      
+                binary_image = prop.image
+                label = prop.label  
 
-                return binary_image , index             
+                return binary_image , label             
