@@ -93,7 +93,6 @@ def label_tif_to_pc_directory(
                                 valid.append(True)
 
                         if False not in valid:
-
                             vertices, faces, normals, values = marching_cubes(
                                 binary_image
                             )
@@ -125,7 +124,6 @@ def label_tif_to_pc_directory(
 
 
 def get_current_label_binary(prop):
-
     binary_image = prop.image
     label = prop.label
 

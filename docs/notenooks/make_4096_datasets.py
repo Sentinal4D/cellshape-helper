@@ -18,7 +18,6 @@ def create_dir_if_not_exist(path):
 def mesh_to_pc(mesh_directory, num_points, save_dir):
     p = Path(mesh_directory)
     for folder in p.iterdir():
-
         files = list(folder.glob("*.off"))
         for mesh_file in tqdm(files):
             mesh_file_path = Path(mesh_file)
